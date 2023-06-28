@@ -16,9 +16,10 @@ const (
 
 // Auth is the collection of credentials that will be used by terrform.
 type Auth struct {
-	ProjectID        string `json:"gcp_project_id,omitempty"`
-	NetworkProjectID string `json:"gcp_network_project_id,omitempty"`
-	ServiceAccount   string `json:"gcp_service_account,omitempty"`
+	ProjectID              string `json:"gcp_project_id,omitempty"`
+	InstanceServiceAccount string `json:"instanceServiceAccount,omitempty"`
+	NetworkProjectID       string `json:"gcp_network_project_id,omitempty"`
+	ServiceAccount         string `json:"gcp_service_account,omitempty"`
 }
 
 type config struct {
@@ -116,11 +117,8 @@ func TFVars(sources TFVarsSources) ([]byte, error) {
 	instanceServiceAccount := ""
 	// Passthrough service accounts are only needed for GCP XPN.
 	if len(cfg.Auth.NetworkProjectID) > 0 {
-		var found bool
-		instanceServiceAccount, found = serviceAccount["client_email"].(string)
-		if !found {
-			return nil, errors.New("could not find google service account")
-		}
+		instanceServiceAccount = cfg.Auth.InstanceServiceAccount
+
 	}
 	cfg.InstanceServiceAccount = instanceServiceAccount
 

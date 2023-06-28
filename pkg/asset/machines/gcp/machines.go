@@ -2,8 +2,6 @@
 package gcp
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"sort"
 
@@ -15,7 +13,6 @@ import (
 	v1 "github.com/openshift/api/config/v1"
 	machinev1 "github.com/openshift/api/machine/v1"
 	machineapi "github.com/openshift/api/machine/v1beta1"
-	gcpconfig "github.com/openshift/installer/pkg/asset/installconfig/gcp"
 	"github.com/openshift/installer/pkg/types"
 	"github.com/openshift/installer/pkg/types/gcp"
 )
@@ -161,21 +158,7 @@ func provider(clusterID string, platform *gcp.Platform, mpool *gcp.MachinePool, 
 	// service accounts with host project privileges. Instead, we can use the existing service account provided
 	// to the installer.
 	if len(platform.NetworkProjectID) > 0 {
-		sess, err := gcpconfig.GetSession(context.TODO())
-		if err != nil {
-			return nil, err
-		}
-
-		var found bool
-		serviceAccount := make(map[string]interface{})
-		err = json.Unmarshal([]byte(sess.Credentials.JSON), &serviceAccount)
-		if err != nil {
-			return nil, err
-		}
-		instanceServiceAccount, found = serviceAccount["client_email"].(string)
-		if !found {
-			return nil, errors.New("could not find google service account")
-		}
+		instanceServiceAccount = platform.InstanceServiceAccount
 	}
 	shieldedInstanceConfig := machineapi.GCPShieldedInstanceConfig{}
 	if mpool.SecureBoot == string(machineapi.SecureBootPolicyEnabled) {

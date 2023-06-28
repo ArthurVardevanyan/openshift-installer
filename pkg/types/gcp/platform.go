@@ -25,6 +25,11 @@ type Platform struct {
 	// +optional
 	NetworkProjectID string `json:"networkProjectID,omitempty"`
 
+	// InstanceServiceAccount specifies which service account to use
+	// during SHARED VPC/XPN Installations.
+	// +optional
+	InstanceServiceAccount string `json:"instanceServiceAccount,omitempty"`
+
 	// ControlPlaneSubnet is an existing subnet where the control plane will be deployed.
 	// The value should be the name of the subnet.
 	// +optional

@@ -400,9 +400,10 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 		}
 
 		auth := gcptfvars.Auth{
-			ProjectID:        installConfig.Config.GCP.ProjectID,
-			NetworkProjectID: installConfig.Config.GCP.NetworkProjectID,
-			ServiceAccount:   string(sess.Credentials.JSON),
+			ProjectID:              installConfig.Config.GCP.ProjectID,
+			NetworkProjectID:       installConfig.Config.GCP.NetworkProjectID,
+			InstanceServiceAccount: installConfig.Config.GCP.InstanceServiceAccount,
+			ServiceAccount:         string(sess.Credentials.JSON),
 		}
 
 		client, err := gcpconfig.NewClient(context.Background())
