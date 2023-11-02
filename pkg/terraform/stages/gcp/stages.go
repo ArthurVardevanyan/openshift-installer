@@ -20,7 +20,7 @@ var PlatformStages = []terraform.Stage{
 	stages.NewStage(
 		"gcp",
 		"bootstrap",
-		[]providers.Provider{providers.Google, providers.Ignition},
+		[]providers.Provider{providers.Google, providers.Ignition, providers.Local},
 		stages.WithNormalBootstrapDestroy(),
 	),
 	stages.NewStage(
